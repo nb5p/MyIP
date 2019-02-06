@@ -62,7 +62,7 @@ extend-shallow@^3.0.2:
     assign-symbols "^1.0.0"
     is-extendable "^1.0.1"
 
-gulp-htmlclean@^2.7.22:
+gulp-htmlclean@2.7.22:
   version "2.7.22"
   resolved "https://registry.yarnpkg.com/gulp-htmlclean/-/gulp-htmlclean-2.7.22.tgz#a7811de8d1221122ae60d660ca0170b65b698dde"
   integrity sha1-p4Ed6NEiESKuYNZgygFwtltpjd4=
@@ -71,7 +71,7 @@ gulp-htmlclean@^2.7.22:
     plugin-error "^1.0.1"
     through2 "^2.0.3"
 
-gulp-htmlmin@^5.0.1:
+gulp-htmlmin@5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/gulp-htmlmin/-/gulp-htmlmin-5.0.1.tgz#90fc5e8ad0425a9e86d5d521427184e7276365e7"
   integrity sha512-ASlyDPZOSKjHYUifYV0rf9JPDflN9IRIb8lw2vRqtYMC4ljU3zAmnnaVXwFQ3H+CfXxZSUesZ2x7jrnPJu93jA==

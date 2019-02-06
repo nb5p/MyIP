@@ -8,6 +8,11 @@
     <title>IP 地址查询</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/suka.css@0.2.1">
+    <style>
+        .ip-body {
+            min-height: 48px;
+        }
+    </style>
 </head>
 
 <body>
@@ -18,9 +23,15 @@
                 <div class="column">
                     <div class="box">
                         <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">内网 IP 地址</h2>
-                        <p class="sk-text-center sk-text-small">使用 WebRTC 查询</p>
+                        <p class="sk-text-center sk-text-small">数据来自 WebRTC + 纯真</p>
                         <hr class="sk-my-2">
-                        <p class="sk-text-center"><span id="ip-webrtc"></span><span id="ip-webrtc-geo"></span></p>
+                        <div class="ip-body">
+                            <p class="sk-text-center">
+                                <span id="ip-webrtc"></span>
+                                <br>
+                                <span id="ip-webrtc-cz88" class="sk-text-small"></span>
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="column">
@@ -28,15 +39,25 @@
                         <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国内查询</h2>
                         <p class="sk-text-center sk-text-small">数据来自 IPIP.net</p>
                         <hr class="sk-my-2">
-                        <p class="sk-text-center"><span id="ip-ipipnet"></span></p>
+                        <div class="ip-body">
+                            <p class="sk-text-center">
+                                <span id="ip-ipipnet"></span>
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="column">
                     <div class="box">
                         <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国内查询</h2>
-                        <p class="sk-text-center sk-text-small">数据来自淘宝</p>
+                        <p class="sk-text-center sk-text-small">数据来自淘宝 + 纯真</p>
                         <hr class="sk-my-2">
-                        <p class="sk-text-center"><span id="ip-taobao"></span><br><span id="ip-taobao-geo" class="sk-text-small"></span></p>
+                        <div class="ip-body">
+                            <p class="sk-text-center">
+                                <span id="ip-taobao"></span>
+                                <br>
+                                <span id="ip-taobao-cz88" class="sk-text-small"></span>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -46,23 +67,41 @@
                         <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国外查询</h2>
                         <p class="sk-text-center sk-text-small">数据来自 IP.SB</p>
                         <hr class="sk-my-2">
-                        <p class="sk-text-center"><span id="ip-ipsb"></span><br><span id="ip-ipsb-geo" class="sk-text-small"></span></p>
+                        <div class="ip-body">
+                            <p class="sk-text-center">
+                                <span id="ip-ipsb"></span>
+                                <br>
+                                <span id="ip-ipsb-geo" class="sk-text-small"></span>
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="column">
                     <div class="box">
                         <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国外查询</h2>
-                        <p class="sk-text-center sk-text-small">数据来自 rixCloud</p>
+                        <p class="sk-text-center sk-text-small">数据来自 ipify + 纯真</p>
                         <hr class="sk-my-2">
-
+                        <div class="ip-body">
+                            <p class="sk-text-center">
+                                <span id="ip-ipify"></span>
+                                <br>
+                                <span id="ip-ipify-cz88" class="sk-text-small"></span>
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="column">
                     <div class="box">
                         <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国外查询</h2>
-                        <p class="sk-text-center sk-text-small">数据来自 Google</p>
+                        <p class="sk-text-center sk-text-small">数据来自 ipify + IP-API.com</p>
                         <hr class="sk-my-2">
-
+                        <div class="ip-body">
+                            <p class="sk-text-center">
+                                <span id="ip-ipify-1"></span>
+                                <br>
+                                <span id="ip-ipify-ipapi" class="sk-text-small"></span>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -99,11 +138,11 @@
                         $$.getElementById(elID).innerHTML = resp.data.address;
                     })
             },
-            parseIPIpsb: (ip, elID) => {
-                IP.get(`https://api.ip.sb/geoip/${ip}`, 'json')
-                .then(resp => {
-                    $$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.region} ${resp.data.city}<br><small>${resp.data.organization}</small>`;
-                })
+            parseIPIpapi: (ip, elID) => {
+                IP.get(`https://ip-api.com/json/${ip}`, 'json')
+                    .then(resp => {
+                        $$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.regionName} ${resp.data.city}<br><small>${resp.data.isp}</small>`;
+                    })
             },
             getWebrtcIP: () => {
                 window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
@@ -114,9 +153,12 @@
                 pc.createOffer(pc.setLocalDescription.bind(pc), noop);
                 pc.onicecandidate = (ice) => {
                     if (!ice || !ice.candidate || !ice.candidate.candidate) {
+                        $$.getElementById('ip-webrtc').innerHTML = '没有查询到 IP';
                         return;
                     }
-                    $$.getElementById('ip-webrtc').innerHTML = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+                    let ip = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+                    $$.getElementById('ip-webrtc').innerHTML = ip;
+                    IP.parseIPCz88(ip, 'ip-webrtc-cz88');
                     pc.onicecandidate = noop;
                 };
             },
@@ -126,16 +168,29 @@
             },
             getTaobaoIP: (data) => {
                 $$.getElementById('ip-taobao').innerHTML = data.ip;
-                IP.parseIPCz88(data.ip, 'ip-taobao-geo');
+                IP.parseIPCz88(data.ip, 'ip-taobao-cz88');
             },
             getIpsbIP: (data) => {
                 $$.getElementById('ip-ipsb').innerHTML = data.address;
-                $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.operator}`
-            }
+                $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.operator}`
+            },
+            getIpifyIP: () => {
+                IP.get('https://api.ipify.org/?format=json', 'json')
+                    .then(resp => {
+                        $$.getElementById('ip-ipify').innerHTML = resp.data.ip;
+                        $$.getElementById('ip-ipify-1').innerHTML = resp.data.ip;
+                        return resp.data.ip;
+                    })
+                    .then(ip => {
+                        IP.parseIPCz88(ip, 'ip-ipify-cz88');
+                        IP.parseIPIpapi(ip, 'ip-ipify-ipapi');
+                    })
+            },
         };
         window.ipCallback = (data) => IP.getTaobaoIP(data);
-
+        IP.getWebrtcIP();
         IP.getIpipnetIP();
+        IP.getIpifyIP();
     </script>
     <script src="https://www.taobao.com/help/getip.php"></script>
     <script src="https://ipv4.ip.sb/addrinfo.php?callback=IP.getIpsbIP"></script>

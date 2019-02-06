@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/npm/skx@0.0.1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <title>IP 地址查询</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/suka.css@0.2.1">
+</head>
+
+<body>
+    <div class="container">
+        <section class="section">
+            <h1 class="sk-text-center title">IP 地址查询</h1>
+            <div class="columns">
+                <div class="column">
+                    <div class="box">
+                        <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">内网 IP 地址</h2>
+                        <p class="sk-text-center sk-text-small">使用 WebRTC 查询</p>
+                        <hr class="sk-my-2">
+                        <p class="sk-text-center"><span id="ip-webrtc"></span><span id="ip-webrtc-geo"></span></p>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="box">
+                        <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国内查询</h2>
+                        <p class="sk-text-center sk-text-small">数据来自 IPIP.net</p>
+                        <hr class="sk-my-2">
+                        <p class="sk-text-center"><span id="ip-ipipnet"></span></p>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="box">
+                        <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国内查询</h2>
+                        <p class="sk-text-center sk-text-small">数据来自淘宝</p>
+                        <hr class="sk-my-2">
+                        <p class="sk-text-center"><span id="ip-taobao"></span><span id="ip-taobao-geo"></span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="box">
+                        <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国外查询</h2>
+                        <p class="sk-text-center sk-text-small">数据来自 IP.SB</p>
+                        <hr class="sk-my-2">
+                        <p class="sk-text-center"><span id="ip-ipsb"></span><br><span id="ip-ipsb-geo"></span></p>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="box">
+                        <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国外查询</h2>
+                        <p class="sk-text-center sk-text-small">数据来自 rixCloud</p>
+                        <hr class="sk-my-2">
+
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="box">
+                        <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国外查询</h2>
+                        <p class="sk-text-center sk-text-small">数据来自 Google</p>
+                        <hr class="sk-my-2">
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        const $$ = document;
+        let IP = {
+            getText: (url) =>
+                fetch(url, {
+                    method: 'GET'
+                }).then(resp => Promise.all([resp.ok, resp.status, resp.text(), resp.headers])
+                ).then(([ok, status, json, headers]) => {
+                    if (ok) {
+                        let data = {
+                            ok,
+                            status,
+                            data: json,
+                            headers
+                        }
+                        return data;
+                    } else {
+                        throw new Error(JSON.stringify(json.error));
+                    }
+                }).catch(error => {
+                    throw error;
+                }),
+            getJson: (url) =>
+                fetch(url, {
+                    method: 'GET'
+                }).then(resp => Promise.all([resp.ok, resp.status, resp.json(), resp.headers])
+                ).then(([ok, status, json, headers]) => {
+                    if (ok) {
+                        let data = {
+                            ok,
+                            status,
+                            data: json,
+                            headers
+                        }
+                        return data;
+                    } else {
+                        throw new Error(JSON.stringify(json.error));
+                    }
+                }).catch(error => {
+                    throw error;
+                }),
+            getWebrtcIP: () => {
+                window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+                var pc = new RTCPeerConnection({ iceServers: [] }),
+                    noop = () => { };
+
+                pc.createDataChannel('');
+                pc.createOffer(pc.setLocalDescription.bind(pc), noop);
+                pc.onicecandidate = (ice) => {
+                    if (!ice || !ice.candidate || !ice.candidate.candidate) {
+                        return;
+                    }
+                    $$.getElementById('ip-webrtc').innerHTML = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+                    pc.onicecandidate = noop;
+                };
+            },
+            getIpipnetIP: () => {
+                IP.getText('https://myip.ipip.net')
+                    .then(resp => $$.getElementById('ip-ipipnet').innerHTML = resp.data);
+            },
+            getTaobaoIP: (data) => {
+                $$.getElementById('ip-taobao').innerHTML = data.ip;
+            },
+            getIpsbIP: (data) => {
+                console.log(data);
+                $$.getElementById('ip-ipsb').innerHTML = data.address;
+                $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.operator}`
+            }
+        }
+        window.ipCallback = (data) => IP.getTaobaoIP(data);
+
+        IP.getIpipnetIP();
+    </script>
+    <script src="https://www.taobao.com/help/getip.php"></script>
+    <script src="https://ipv4.ip.sb/addrinfo.php?callback=IP.getIpsbIP"></script>
+    <!--<script>
+        window.ga_tid = "UA-122669675-3";
+        window.ga_api = "https://dt.skk.moe/v2/";
+        window.ga_perf_api = "https://dt.skk.moe/v2/"
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/galib@0.3.7/dist/dt.s.min.js"></script>-->
+</body>
+
+</html>

@@ -36,7 +36,7 @@
                         <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国内查询</h2>
                         <p class="sk-text-center sk-text-small">数据来自淘宝</p>
                         <hr class="sk-my-2">
-                        <p class="sk-text-center"><span id="ip-taobao"></span><span id="ip-taobao-geo"></span></p>
+                        <p class="sk-text-center"><span id="ip-taobao"></span><br><span id="ip-taobao-geo" class="sk-text-small"></span></p>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                         <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国外查询</h2>
                         <p class="sk-text-center sk-text-small">数据来自 IP.SB</p>
                         <hr class="sk-my-2">
-                        <p class="sk-text-center"><span id="ip-ipsb"></span><br><span id="ip-ipsb-geo"></span></p>
+                        <p class="sk-text-center"><span id="ip-ipsb"></span><br><span id="ip-ipsb-geo" class="sk-text-small"></span></p>
                     </div>
                 </div>
                 <div class="column">
@@ -93,9 +93,21 @@
                 }).catch(error => {
                     throw error;
                 }),
+            parseIPCz88: (ip, elID) => {
+                IP.get(`https://api.ttt.sh/ip/qqwry/${ip}`, 'json')
+                    .then(resp => {
+                        $$.getElementById(elID).innerHTML = resp.data.address;
+                    })
+            },
+            parseIPIpsb: (ip, elID) => {
+                IP.get(`https://api.ip.sb/geoip/${ip}`, 'json')
+                .then(resp => {
+                    $$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.region} ${resp.data.city}<br><small>${resp.data.organization}</small>`;
+                })
+            },
             getWebrtcIP: () => {
                 window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
-                var pc = new RTCPeerConnection({ iceServers: [] }),
+                let pc = new RTCPeerConnection({ iceServers: [] }),
                     noop = () => { };
 
                 pc.createDataChannel('');
@@ -114,13 +126,13 @@
             },
             getTaobaoIP: (data) => {
                 $$.getElementById('ip-taobao').innerHTML = data.ip;
+                IP.parseIPCz88(data.ip, 'ip-taobao-geo');
             },
             getIpsbIP: (data) => {
-                console.log(data);
                 $$.getElementById('ip-ipsb').innerHTML = data.address;
                 $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.operator}`
             }
-        }
+        };
         window.ipCallback = (data) => IP.getTaobaoIP(data);
 
         IP.getIpipnetIP();

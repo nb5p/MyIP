@@ -71,38 +71,22 @@
     <script>
         const $$ = document;
         let IP = {
-            getText: (url) =>
-                fetch(url, {
-                    method: 'GET'
-                }).then(resp => Promise.all([resp.ok, resp.status, resp.text(), resp.headers])
-                ).then(([ok, status, json, headers]) => {
-                    if (ok) {
-                        let data = {
-                            ok,
-                            status,
-                            data: json,
-                            headers
-                        }
-                        return data;
-                    } else {
-                        throw new Error(JSON.stringify(json.error));
+            get: (url, type) =>
+                fetch(url, { method: 'GET' }).then((resp) => {
+                    if (type === 'text')
+                        return Promise.all([resp.ok, resp.status, resp.text(), resp.headers]);
+                    else {
+                        return Promise.all([resp.ok, resp.status, resp.json(), resp.headers]);
                     }
-                }).catch(error => {
-                    throw error;
-                }),
-            getJson: (url) =>
-                fetch(url, {
-                    method: 'GET'
-                }).then(resp => Promise.all([resp.ok, resp.status, resp.json(), resp.headers])
-                ).then(([ok, status, json, headers]) => {
+                }).then(([ok, status, data, headers]) => {
                     if (ok) {
-                        let data = {
+                        let json = {
                             ok,
                             status,
-                            data: json,
+                            data,
                             headers
                         }
-                        return data;
+                        return json;
                     } else {
                         throw new Error(JSON.stringify(json.error));
                     }
@@ -125,7 +109,7 @@
                 };
             },
             getIpipnetIP: () => {
-                IP.getText('https://myip.ipip.net')
+                IP.get('https://myip.ipip.net', 'text')
                     .then(resp => $$.getElementById('ip-ipipnet').innerHTML = resp.data);
             },
             getTaobaoIP: (data) => {

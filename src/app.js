@@ -23,9 +23,9 @@ let IP = {
             throw error;
         }),
     parseIPCz88: (ip, elID) => {
-        IP.get(`https://api.ttt.sh/ip/qqwry/${ip}`, 'json')
+        IP.get(`https://api.ttt.sh/ip/qqwry/${ip}?type=addr`, 'text')
             .then(resp => {
-                $$.getElementById(elID).innerHTML = resp.data.address;
+                $$.getElementById(elID).innerHTML = resp.data;
             })
     },
     parseIPIpapi: (ip, elID) => {

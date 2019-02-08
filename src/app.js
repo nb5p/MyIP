@@ -34,6 +34,19 @@ let IP = {
                 $$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.regionName} ${resp.data.city} ${resp.data.isp}`;
             })
     },
+    parseIPIpip: (ip, elID) => {
+        IP.get(`https://api.skk.moe/network/parseIp/ipip/${ip}`, 'json')
+            .then(resp => {
+                let x = '';
+                x += (resp.data[0] !== '') ? `${resp.data[0]} ` : '';
+                x += (resp.data[1] !== '') ? `${resp.data[1]} ` : '';
+                x += (resp.data[2] !== '') ? `${resp.data[2]} ` : '';
+                x += (resp.data[3] !== '') ? `${resp.data[3]} ` : '';
+                x += (resp.data[4] !== '') ? `${resp.data[4]} ` : '';
+                $$.getElementById(elID).innerHTML = x;
+                //$$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.regionName} ${resp.data.city} ${resp.data.isp}`;
+            })
+    },
     getWebrtcIP: () => {
         window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
         let pc = new RTCPeerConnection({ iceServers: [] }),
@@ -58,7 +71,7 @@ let IP = {
     },
     getTaobaoIP: (data) => {
         $$.getElementById('ip-taobao').innerHTML = data.ip;
-        IP.parseIPCz88(data.ip, 'ip-taobao-cz88');
+        IP.parseIPIpip(data.ip, 'ip-taobao-ipip');
     },
     getIpsbIP: (data) => {
         $$.getElementById('ip-ipsb').innerHTML = data.address;
@@ -73,7 +86,7 @@ let IP = {
             })
             .then(ip => {
                 IP.parseIPCz88(ip, 'ip-ipify-cz88');
-                IP.parseIPIpapi(ip, 'ip-ipify-ipapi');
+                IP.parseIPIpip(ip, 'ip-ipify-ipip');
             })
     },
 };

@@ -90,7 +90,38 @@ let IP = {
             })
     },
 };
+
 window.ipCallback = (data) => IP.getTaobaoIP(data);
+
+let HTTP = {
+    checker: (domain, cbElID) => {
+        let img = new Image;
+        let timeout = setTimeout(() => {
+            img.onerror = img.onload = null;
+            $$.getElementById(cbElID).innerHTML = '<span class="sk-text-error">连接超时</span>'
+        }, 6000);
+
+        img.onerror = () => {
+            clearTimeout(timeout);
+            $$.getElementById(cbElID).innerHTML = '<span class="sk-text-error">无法访问</span>'
+        }
+
+        img.onload = () => {
+            clearTimeout(timeout);
+            $$.getElementById(cbElID).innerHTML = '<span class="sk-text-success">连接正常</span>'
+        }
+
+        img.src = `https://${domain}/favicon.ico?${+(new Date)}`
+    },
+    runcheck: () => {
+        HTTP.checker('www.baidu.com', 'http-baidu');
+        HTTP.checker('www.163.com', 'http-163');
+        HTTP.checker('github.com', 'http-github');
+        HTTP.checker('www.youtube.com', 'http-youtube');
+    }
+};
+
 IP.getWebrtcIP();
 IP.getIpipnetIP();
 IP.getIpifyIP();
+HTTP.runcheck();

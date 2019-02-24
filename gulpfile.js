@@ -5,7 +5,7 @@ const htmlmin = require("gulp-htmlmin");
 const htmlclean = require("gulp-htmlclean");
 
 let minifyHTML = () => {
-    return gulp.src('src/*.html')
+    return gulp.src('src/**/*.html')
         .pipe(htmlmin({
             removeComments: true,
             minifyJS: true,

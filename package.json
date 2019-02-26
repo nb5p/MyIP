@@ -18,8 +18,8 @@
     },
     "homepage": "https://github.com/SukkaW/MyIP#readme",
     "dependencies": {
-        "@babel/core": "7.3.3",
-        "@babel/preset-env": "7.3.1",
+        "@babel/core": "7.3.4",
+        "@babel/preset-env": "7.3.4",
         "gulp": "4.0.0",
         "gulp-babel": "8.0.0",
         "gulp-htmlclean": "2.7.22",

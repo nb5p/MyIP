@@ -115,7 +115,7 @@ let HTTP = {
     },
     runcheck: () => {
         HTTP.checker('www.baidu.com', 'http-baidu');
-        HTTP.checker('www.163.com', 'http-163');
+        HTTP.checker('music.163.com', 'http-163');
         HTTP.checker('github.com', 'http-github');
         HTTP.checker('www.youtube.com', 'http-youtube');
     }

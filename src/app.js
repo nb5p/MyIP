@@ -99,7 +99,7 @@ let HTTP = {
         let timeout = setTimeout(() => {
             img.onerror = img.onload = null;
             $$.getElementById(cbElID).innerHTML = '<span class="sk-text-error">连接超时</span>'
-            # Cancel the load
+            // Cancel the load
             img.src = null;
         }, 6000);
 

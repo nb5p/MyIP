@@ -38,11 +38,9 @@ let IP = {
         IP.get(`https://api.skk.moe/network/parseIp/ipip/${ip}`, 'json')
             .then(resp => {
                 let x = '';
-                x += (resp.data[0] !== '') ? `${resp.data[0]} ` : '';
-                x += (resp.data[1] !== '') ? `${resp.data[1]} ` : '';
-                x += (resp.data[2] !== '') ? `${resp.data[2]} ` : '';
-                x += (resp.data[3] !== '') ? `${resp.data[3]} ` : '';
-                x += (resp.data[4] !== '') ? `${resp.data[4]} ` : '';
+                for (let i of resp.data) {
+                    x += (i !== '') ? `${i} ` : '';
+                }
                 $$.getElementById(elID).innerHTML = x;
                 //$$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.regionName} ${resp.data.city} ${resp.data.isp}`;
             })
@@ -67,7 +65,10 @@ let IP = {
     },
     getIpipnetIP: () => {
         IP.get('https://myip.ipip.net', 'text')
-            .then(resp => $$.getElementById('ip-ipipnet').innerHTML = resp.data);
+            .then((resp) => {
+                let data = resp.data.replace('当前 IP：', '').split(' 来自于：');
+                $$.getElementById('ip-ipipnet').innerHTML = `<p>${data[0]}</p><p class="sk-text-small">${data[1]}</p>`;
+            });
     },
     getTaobaoIP: (data) => {
         $$.getElementById('ip-taobao').innerHTML = data.ip;

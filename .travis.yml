@@ -7,18 +7,9 @@ install:
   - yarn
 script:
   - gulp build
+  - chmod +x deploy.sh
+  - ./deploy.sh
 cache:
   yarn: true
   directories:
     - node_modules
-deploy:
-  provider: pages
-  local-dir: dist
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  email: $GITHUB_EMAIL
-  name: $GITHUB_USER
-  keep-history: true
-  fqdn: ip.skk.moe
-  on:
-    branch: master

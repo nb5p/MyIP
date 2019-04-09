@@ -1,4 +1,5 @@
 const $$ = document;
+let random = parseInt(Math.random() * 100000000);
 let IP = {
     get: (url, type) =>
         fetch(url, { method: 'GET' }).then((resp) => {
@@ -64,7 +65,7 @@ let IP = {
         };
     },
     getIpipnetIP: () => {
-        IP.get('https://myip.ipip.net', 'text')
+        IP.get(`https://myip.ipip.net/?z=${random}`, 'text')
             .then((resp) => {
                 let data = resp.data.replace('当前 IP：', '').split(' 来自于：');
                 $$.getElementById('ip-ipipnet').innerHTML = `<p>${data[0]}</p><p class="sk-text-small">${data[1]}</p>`;
@@ -79,7 +80,7 @@ let IP = {
         $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.operator}`
     },
     getIpifyIP: () => {
-        IP.get('https://api.ipify.org/?format=json', 'json')
+        IP.get(`https://api.ipify.org/?format=json&z=${random}`, 'json')
             .then(resp => {
                 $$.getElementById('ip-ipify').innerHTML = resp.data.ip;
                 $$.getElementById('ip-ipify-1').innerHTML = resp.data.ip;

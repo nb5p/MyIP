@@ -52,52 +52,31 @@
         <div style="width: 61.8%">
             <h3>IP 地址</h3>
             <p>
-                <span class="ip-title">IPIP&nbsp;&nbsp;&nbsp;&nbsp;国内</span>
-                &nbsp;:&nbsp;
-                <small id="ip-ipipnet"></small>
+                <span class="ip-title">IPIP&nbsp;&nbsp;&nbsp;&nbsp;国内</span> : <span id="ip-ipipnet"></span>
             </p>
             <p>
-                <span class="ip-title">淘宝&nbsp;&nbsp;&nbsp;&nbsp;国内</span>
-                &nbsp;:&nbsp;
-                <span id="ip-taobao"></span>
-                <span id="ip-taobao-ipip"></span>
+                <span class="ip-title">淘宝&nbsp;&nbsp;&nbsp;&nbsp;国内</span> : <span id="ip-taobao"></span> <span id="ip-taobao-ipip"></span>
             </p>
             <p>
-                <span class="ip-title">IP.SB&nbsp;&nbsp;海外</span>
-                &nbsp;:&nbsp;
-                <span id="ip-ipsb"></span>
-                <span id="ip-ipsb-geo"></span>
+                <span class="ip-title">IP.SB&nbsp;&nbsp;海外</span> : <span id="ip-ipsb"></span> <span id="ip-ipsb-geo"></span>
             </p>
             <p>
-                <span class="ip-title">ipify&nbsp;&nbsp;&nbsp;海外</span>
-                &nbsp;:&nbsp;
-                <span id="ip-ipify"></span>
-                <span id="ip-ipify-ipip"></span>
-                <span id="ip-ipify-1" style="display: none"></span>
-                <span id="ip-ipify-cz88" style="display: none"></span>
+                <span class="ip-title">ipify&nbsp;&nbsp;&nbsp;海外</span> : <span id="ip-ipify"></span> <span id="ip-ipify-ipip"></span>
             </p>
         </div>
         <div style="width: 38.2%">
             <h3>网站访问检查</h3>
             <p>
-                <span class="ip-title">百度搜索</span>
-                &nbsp;:&nbsp;
-                <span id="http-baidu"></span>
+                <span class="ip-title">百度搜索</span> : <span id="http-baidu"></span>
             </p>
             <p>
-                <span class="ip-title">网易 163</span>
-                &nbsp;:&nbsp;
-                <span id="http-163"></span>
+                <span class="ip-title">网易云音乐</span> : <span id="http-163"></span>
             </p>
             <p>
-                <span class="ip-title">GitHub</span>
-                &nbsp;:&nbsp;
-                <span id="http-github"></span>
+                <span class="ip-title">GitHub</span> : <span id="http-github"></span>
             </p>
             <p>
-                <span class="ip-title">YouTube</span>
-                &nbsp;:&nbsp;
-                <span id="http-youtube"></span>
+                <span class="ip-title">YouTube</span> : <span id="http-youtube"></span>
             </p>
         </div>
     </div>
@@ -126,34 +105,23 @@
                 }).catch(error => {
                     throw error;
                 }),
-            parseIPCz88: (ip, elID) => {
-                IP.get(`https://api.ttt.sh/ip/qqwry/${ip}?type=addr`, 'text')
-                    .then(resp => {
-                        $$.getElementById(elID).innerHTML = resp.data;
-                    })
-            },
-            parseIPIpapi: (ip, elID) => {
-                IP.get(`https://api.skk.moe/network/parseIp/v2/${ip}`, 'json')
-                    .then(resp => {
-                        $$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.regionName} ${resp.data.city} ${resp.data.isp}`;
-                    })
-            },
             parseIPIpip: (ip, elID) => {
                 IP.get(`https://api.skk.moe/network/parseIp/ipip/${ip}`, 'json')
                     .then(resp => {
                         let x = '';
-                        x += (resp.data[0] !== '') ? `${resp.data[0]} ` : '';
-                        x += (resp.data[1] !== '') ? `${resp.data[1]} ` : '';
-                        x += (resp.data[2] !== '') ? `${resp.data[2]} ` : '';
-                        x += (resp.data[3] !== '') ? `${resp.data[3]} ` : '';
-                        x += (resp.data[4] !== '') ? `${resp.data[4]} ` : '';
+                        for (let i of resp.data) {
+                            x += (i !== '') ? `${i} ` : '';
+                        }
                         $$.getElementById(elID).innerHTML = x;
                         //$$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.regionName} ${resp.data.city} ${resp.data.isp}`;
                     })
             },
             getIpipnetIP: () => {
                 IP.get('https://myip.ipip.net', 'text')
-                    .then(resp => $$.getElementById('ip-ipipnet').innerHTML = resp.data);
+                    .then((resp) => {
+                        let data = resp.data.replace('当前 IP：', '').split(' 来自于：');
+                        $$.getElementById('ip-ipipnet').innerHTML = `${data[0]} ${data[1]}`;
+                    });
             },
             getTaobaoIP: (data) => {
                 $$.getElementById('ip-taobao').innerHTML = data.ip;
@@ -199,7 +167,7 @@
             },
             runcheck: () => {
                 HTTP.checker('www.baidu.com', 'http-baidu');
-                HTTP.checker('www.163.com', 'http-163');
+                HTTP.checker('s1.music.126.net/style', 'http-163');
                 HTTP.checker('github.com', 'http-github');
                 HTTP.checker('www.youtube.com', 'http-youtube');
             }

@@ -23,12 +23,6 @@ let IP = {
         }).catch(error => {
             throw error;
         }),
-    parseIPCz88: (ip, elID) => {
-        IP.get(`https://api.ttt.sh/ip/qqwry/${ip}?type=addr`, 'text')
-            .then(resp => {
-                $$.getElementById(elID).innerHTML = resp.data;
-            })
-    },
     parseIPIpapi: (ip, elID) => {
         IP.get(`https://api.skk.moe/network/parseIp/v2/${ip}`, 'json')
             .then(resp => {
@@ -60,7 +54,7 @@ let IP = {
             }
             let ip = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
             $$.getElementById('ip-webrtc').innerHTML = ip;
-            IP.parseIPCz88(ip, 'ip-webrtc-cz88');
+            IP.parseIPIpip(ip, 'ip-webrtc-cz88');
             pc.onicecandidate = noop;
         };
     },
@@ -77,20 +71,25 @@ let IP = {
     },
     getIpsbIP: (data) => {
         $$.getElementById('ip-ipsb').innerHTML = data.address;
-        $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.operator}`
+        $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.isp.name}`
     },
     getIpifyIP: () => {
         IP.get(`https://api.ipify.org/?format=json&z=${random}`, 'json')
             .then(resp => {
                 $$.getElementById('ip-ipify').innerHTML = resp.data.ip;
-                $$.getElementById('ip-ipify-1').innerHTML = resp.data.ip;
                 return resp.data.ip;
             })
             .then(ip => {
-                IP.parseIPCz88(ip, 'ip-ipify-cz88');
                 IP.parseIPIpip(ip, 'ip-ipify-ipip');
             })
     },
+    getIPApiIP: () => {
+        IP.get(`https://ipapi.co/json?z=${random}`, 'json')
+            .then(resp => {
+                $$.getElementById('ip-ipapi').innerHTML = resp.data.ip;
+                IP.parseIPIpip(resp.data.ip, 'ip-ipapi-geo');
+            })
+    }
 };
 
 window.ipCallback = (data) => IP.getTaobaoIP(data);
@@ -127,5 +126,6 @@ let HTTP = {
 
 IP.getWebrtcIP();
 IP.getIpipnetIP();
+IP.getIPApiIP();
 IP.getIpifyIP();
 HTTP.runcheck();

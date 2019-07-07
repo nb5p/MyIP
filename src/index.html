@@ -230,6 +230,20 @@
         window.ga_url = "https://ga.giuem.com";
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@giuem/ga-proxy" async></script>
+    <script>
+        (function () {
+            function perfops() {
+                var js = document.createElement('script');
+                js.src = 'https://cdn.jsdelivr.net/npm/perfops-rom';
+                document.body.appendChild(js);
+            }
+            if (document.readyState === 'complete') {
+                perfops();
+            } else {
+                window.addEventListener('load', perfops);
+            }
+        })();
+    </script>
 </body>
 
 </html>

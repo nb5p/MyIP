@@ -1,6 +1,6 @@
 # MyIP
 
-An alternative ip111 service.
+An alternative ip111 service - https://ip.skk.moe
 
 [![Author](https://img.shields.io/badge/author-Sukka-b68469.svg?style=flat-square)](https://skk.moe)
 [![Travis Status](https://img.shields.io/travis/SukkaW/MyIP.svg?style=flat-square)](https://travis-ci.org/sukkaw/myip)
@@ -11,8 +11,16 @@ An alternative ip111 service.
 ```bash
 $ git clone https://github.com/SukkaW/MyIP
 $ cd MyIP
-$ yarn
+$ yarn # yarn global add gulp-cli
 $ gulp build
+```
+
+## Usage
+
+You can embed simple ui verision of `ip.skk.moe` in your web application:
+
+```html
+<iframe src="https://ip.skk.moe/simple/" scrolling="no" frameborder="0"></iframe>
 ```
 
 ## Info
@@ -21,7 +29,8 @@ $ gulp build
 - ~~Taobao JSONP IP API: `https://www.taobao.com/help/getip.php`~~
 - Sohu JSON IP API: `https://pv.sohu.com/cityjson?ie=utf-8`
 - [IP.SB](https://ip.sb) API: `https://ip.sb/api/`
-- IPIFY for IP detection: `https://www.ipify.org/`
+- ~~IPIFY for IP detection: `https://www.ipify.org/`~~
+- IPAPI for IP detection: `https://ipapi.co/json`
 - IPIP API for Geo-IP: `https://freeapi.ipip.net`
 
 ## Contributing

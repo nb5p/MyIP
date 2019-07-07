@@ -82,6 +82,9 @@ let IP = {
             .then(ip => {
                 IP.parseIPIpip(ip, 'ip-ipify-ipip');
             })
+            .catch(e => {
+                window.alert('如果你正在使用 ADBlock 或者类似的插件，请取消在本页面时对 api.ipify.org 的拦截')
+            })
     },
     getIPApiIP: () => {
         IP.get(`https://ipapi.co/json?z=${random}`, 'json')
@@ -89,10 +92,18 @@ let IP = {
                 $$.getElementById('ip-ipapi').innerHTML = resp.data.ip;
                 IP.parseIPIpip(resp.data.ip, 'ip-ipapi-geo');
             })
+            .catch(e => {
+                window.alert('如果你正在使用 ADBlock 或者类似的插件，请取消在本页面时对 ipapi.co 的拦截')
+            })
+    },
+    getSohuIP: () => {
+        if (typeof returnCitySN === 'undefined') {
+            window.alert('如果你正在使用 ADBlock 或者类似的插件，请取消在本页面时对 pv.sohu.com 的拦截')
+        }
+        $$.getElementById('ip-sohu').innerHTML = returnCitySN.cip;
+        IP.parseIPIpip(returnCitySN.cip, 'ip-sohu-geo');
     }
 };
-
-window.ipCallback = (data) => IP.getTaobaoIP(data);
 
 let HTTP = {
     checker: (domain, cbElID) => {
@@ -124,8 +135,9 @@ let HTTP = {
     }
 };
 
+HTTP.runcheck();
 IP.getWebrtcIP();
 IP.getIpipnetIP();
 IP.getIPApiIP();
 IP.getIpifyIP();
-HTTP.runcheck();
+IP.getSohuIP();

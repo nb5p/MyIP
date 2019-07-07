@@ -18,7 +18,8 @@ $ gulp build
 ## Info
 
 - IPIP API for IP detection: `https://myip.ipip.net`
-- Taobao JSONP IP API: `https://www.taobao.com/help/getip.php`
+- ~~Taobao JSONP IP API: `https://www.taobao.com/help/getip.php`~~
+- Sohu JSON IP API: `https://pv.sohu.com/cityjson?ie=utf-8`
 - [IP.SB](https://ip.sb) API: `https://ip.sb/api/`
 - IPIFY for IP detection: `https://www.ipify.org/`
 - IPIP API for Geo-IP: `https://freeapi.ipip.net`

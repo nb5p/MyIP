@@ -60,7 +60,7 @@
                 <span class="ip-title">IPIP&nbsp;&nbsp;&nbsp;&nbsp;国内</span>&nbsp;:&nbsp;<span id="ip-ipipnet"></span>
             </p>
             <p>
-                <span class="ip-title">淘宝&nbsp;&nbsp;&nbsp;&nbsp;国内</span>&nbsp;:&nbsp;<span id="ip-taobao"></span> <span id="ip-taobao-ipip"></span>
+                <span class="ip-title">搜狐&nbsp;&nbsp;&nbsp;&nbsp;国内</span>&nbsp;:&nbsp;<span id="ip-sohu"></span> <span id="ip-sohu-ipip"></span>
             </p>
             <p>
                 <span class="ip-title">IP.SB&nbsp;&nbsp;海外</span>&nbsp;:&nbsp;<span id="ip-ipsb"></span> <span id="ip-ipsb-geo"></span>
@@ -88,6 +88,7 @@
     <div>
         <p style="float: right; margin-top: 6px; padding-right: 2px">Powered by <a href="https://ip.skk.moe" target="_blank">ip.skk.moe</a></p>
     </div>
+    <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
     <script>
         const $$ = document;
         let random = parseInt(Math.random() * 100000000);
@@ -132,9 +133,9 @@
                         $$.getElementById('ip-ipipnet').innerHTML = `${data[0]} ${data[1]}`;
                     });
             },
-            getTaobaoIP: (data) => {
-                $$.getElementById('ip-taobao').innerHTML = data.ip;
-                IP.parseIPIpip(data.ip, 'ip-taobao-ipip');
+            getSohuIP: (data) => {
+                $$.getElementById('ip-sohu').innerHTML = returnCitySN.cip;
+                IP.parseIPIpip(returnCitySN.cip, 'ip-sohu-ipip');
             },
             getIpsbIP: (data) => {
                 $$.getElementById('ip-ipsb').innerHTML = data.address;
@@ -148,8 +149,6 @@
                     })
             }
         };
-
-        window.ipCallback = (data) => IP.getTaobaoIP(data);
 
         let HTTP = {
             checker: (domain, cbElID) => {
@@ -179,11 +178,11 @@
             }
         };
 
+        HTTP.runcheck();
+        IP.getSohuIP();
         IP.getIpipnetIP();
         IP.getIPApiIP();
-        HTTP.runcheck();
     </script>
-    <script src="https://www.taobao.com/help/getip.php"></script>
     <script src="https://ipv4.ip.sb/addrinfo?callback=IP.getIpsbIP"></script>
     <script>
         window.ga_tid = "UA-122669675-5";

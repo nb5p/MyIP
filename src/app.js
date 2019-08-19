@@ -40,24 +40,6 @@ let IP = {
                 //$$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.regionName} ${resp.data.city} ${resp.data.isp}`;
             })
     },
-    getWebrtcIP: () => {
-        window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
-        let pc = new RTCPeerConnection({ iceServers: [] }),
-            noop = () => { };
-
-        pc.createDataChannel('');
-        pc.createOffer(pc.setLocalDescription.bind(pc), noop);
-        pc.onicecandidate = (ice) => {
-            if (!ice || !ice.candidate || !ice.candidate.candidate) {
-                $$.getElementById('ip-webrtc').innerHTML = '没有查询到 IP';
-                return;
-            }
-            let ip = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
-            $$.getElementById('ip-webrtc').innerHTML = ip;
-            IP.parseIPIpip(ip, 'ip-webrtc-cz88');
-            pc.onicecandidate = noop;
-        };
-    },
     getIpipnetIP: () => {
         IP.get(`https://myip.ipip.net/?z=${random}`, 'text')
             .then((resp) => {
@@ -136,7 +118,6 @@ let HTTP = {
 };
 
 HTTP.runcheck();
-IP.getWebrtcIP();
 IP.getIpipnetIP();
 IP.getIPApiIP();
 IP.getIpifyIP();

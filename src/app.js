@@ -51,10 +51,6 @@ let IP = {
         $$.getElementById('ip-taobao').innerHTML = data.ip;
         IP.parseIPIpip(data.ip, 'ip-taobao-ipip');
     },
-    getIpsbIP: (data) => {
-        $$.getElementById('ip-ipsb').innerHTML = data.address;
-        $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.isp.name}`
-    },
     getIpifyIP: () => {
         IP.get(`https://api.ipify.org/?format=json&z=${random}`, 'json')
             .then(resp => {
@@ -119,6 +115,11 @@ let HTTP = {
 
 HTTP.runcheck();
 IP.getIpipnetIP();
-IP.getIPApiIP();
+//IP.getIPApiIP();
 IP.getIpifyIP();
 IP.getSohuIP();
+
+const jQueryCallback = (data) => {
+    $$.getElementById('ip-ipsb').innerHTML = data.address;
+    $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.operator}`;
+}

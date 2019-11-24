@@ -24,13 +24,13 @@ let IP = {
             throw error;
         }),
     parseIPIpapi: (ip, elID) => {
-        IP.get(`https://api.skk.moe/network/parseIp/v2/${ip}`, 'json')
+        IP.get(`https://api.skk.moe/network/parseIp/ipip/v3/${ip}`, 'json')
             .then(resp => {
                 $$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.regionName} ${resp.data.city} ${resp.data.isp}`;
             })
     },
     parseIPIpip: (ip, elID) => {
-        IP.get(`https://api.skk.moe/network/parseIp/ipip/${ip}`, 'json')
+        IP.get(`https://api.skk.moe/network/parseIp/ipip/v3/${ip}`, 'json')
             .then(resp => {
                 let x = '';
                 for (let i of resp.data) {

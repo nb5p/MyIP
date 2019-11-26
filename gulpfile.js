@@ -8,9 +8,13 @@ let minifyHTML = () => {
     return gulp.src('src/**/*.html')
         .pipe(htmlmin({
             removeComments: true,
+            collapseWhitespace: true,
+            collapseBooleanAttributes: true,
+            removeEmptyAttributes: true,
+            removeScriptTypeAttributes: true,
+            removeStyleLinkTypeAttributes: true,
             minifyJS: true,
-            minifyCSS: true,
-            collapseWhitespace: true
+            minifyCSS: true
         }))
         .pipe(htmlclean())
         .pipe(gulp.dest('dist'));

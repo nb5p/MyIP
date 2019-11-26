@@ -1,14 +1,14 @@
 const $$ = document;
 let random = parseInt(Math.random() * 100000000);
 let IP = {
-    get: (url, type) =>
-        fetch(url, { method: 'GET' }).then((resp) => {
+    get: (url, type) => fetch(url, { method: 'GET' })
+        .then((resp) => {
             if (type === 'text')
                 return Promise.all([resp.ok, resp.status, resp.text(), resp.headers]);
             else {
                 return Promise.all([resp.ok, resp.status, resp.json(), resp.headers]);
-            }
-        }).then(([ok, status, data, headers]) => {
+            }})
+        .then(([ok, status, data, headers]) => {
             if (ok) {
                 let json = {
                     ok,
@@ -37,19 +37,48 @@ let IP = {
                     x += (i !== '') ? `${i} ` : '';
                 }
                 $$.getElementById(elID).innerHTML = x;
-                //$$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.regionName} ${resp.data.city} ${resp.data.isp}`;
             })
+    },
+    getWebrtcIP: function() {
+        window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection 
+            || window.webkitRTCPeerConnection;
+        var webrtc = new RTCPeerConnection({ iceServers: []}), i = function() {};
+        webrtc.createDataChannel(""),
+        webrtc.createOffer(webrtc.setLocalDescription.bind(webrtc), i),
+        webrtc.onicecandidate = function(con) {
+            if (con && con.candidate && con.candidate.candidate) {
+                var webctrip = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/
+                    .exec(con.candidate.candidate)[1];
+                $$.getElementById("ip-webrtc").innerHTML = webctrip,
+                webrtc.onicecandidate = i;
+                $$.getElementById("ip-webrtc-geo").innerHTML = "WebRTC Leaked IP"
+            } else {
+                $$.getElementById("ip-webrtc").innerHTML = "N/A";
+            }
+        }
     },
     getIpipnetIP: () => {
         IP.get(`https://myip.ipip.net/?z=${random}`, 'text')
             .then((resp) => {
                 let data = resp.data.replace('当前 IP：', '').split(' 来自于：');
-                $$.getElementById('ip-ipipnet').innerHTML = `<p>${data[0]}</p><p class="sk-text-small">${data[1]}</p>`;
+                $$.getElementById('ip-ipipnet').innerHTML = `<p id="ip-ipipnet">${data[0]}</p><p class="sk-text-small" id="ip-ipipnet-geo">${data[1]}</p>`;
             });
+    },
+    getSohuIP: () => {
+        if (typeof returnCitySN === 'undefined') {
+            console.log('Failed to load resource: pv.sohu.com')
+        } else {
+            $$.getElementById('ip-sohu').innerHTML = returnCitySN.cip;
+            IP.parseIPIpip(returnCitySN.cip, 'ip-sohu-geo');
+        }
     },
     getTaobaoIP: (data) => {
         $$.getElementById('ip-taobao').innerHTML = data.ip;
-        IP.parseIPIpip(data.ip, 'ip-taobao-ipip');
+        IP.parseIPIpip(data.ip, 'ip-taobao-geo');
+    },
+    getIpsbIP: (data) => {
+        $$.getElementById('ip-ipsb').innerHTML = data.address;
+        $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.operator}`;
     },
     getIpifyIP: () => {
         IP.get(`https://api.ipify.org/?format=json&z=${random}`, 'json')
@@ -61,25 +90,18 @@ let IP = {
                 IP.parseIPIpip(ip, 'ip-ipify-ipip');
             })
             .catch(e => {
-                window.alert('如果你正在使用 ADBlock 或者类似的插件，请取消在本页面时对 api.ipify.org 的拦截')
+                console.log('Failed to load resource: api.ipify.org')
             })
     },
-    getIPApiIP: () => {
+    getIpapiIP: () => {
         IP.get(`https://ipapi.co/json?z=${random}`, 'json')
             .then(resp => {
                 $$.getElementById('ip-ipapi').innerHTML = resp.data.ip;
-                IP.parseIPIpip(resp.data.ip, 'ip-ipapi-geo');
+                IP.parseIPIpip(resp.data.ip, 'ip-ipapi-ipip');
             })
             .catch(e => {
-                window.alert('如果你正在使用 ADBlock 或者类似的插件，请取消在本页面时对 ipapi.co 的拦截')
+                console.log('Failed to load resource: ipapi.co')
             })
-    },
-    getSohuIP: () => {
-        if (typeof returnCitySN === 'undefined') {
-            window.alert('如果你正在使用 ADBlock 或者类似的插件，请取消在本页面时对 pv.sohu.com 的拦截')
-        }
-        $$.getElementById('ip-sohu').innerHTML = returnCitySN.cip;
-        IP.parseIPIpip(returnCitySN.cip, 'ip-sohu-geo');
     }
 };
 
@@ -88,9 +110,8 @@ let HTTP = {
         let img = new Image;
         let timeout = setTimeout(() => {
             img.onerror = img.onload = null;
+            img.src = '';
             $$.getElementById(cbElID).innerHTML = '<span class="sk-text-error">连接超时</span>'
-            // Cancel the load
-            img.src = null;
         }, 6000);
 
         img.onerror = () => {
@@ -114,12 +135,11 @@ let HTTP = {
 };
 
 HTTP.runcheck();
+
+IP.getWebrtcIP()
 IP.getIpipnetIP();
-//IP.getIPApiIP();
-IP.getIpifyIP();
 IP.getSohuIP();
 
-const jQueryCallback = (data) => {
-    $$.getElementById('ip-ipsb').innerHTML = data.address;
-    $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.operator}`;
-}
+// IP.getIpsbIP();
+IP.getIpifyIP();
+IP.getIpapiIP();

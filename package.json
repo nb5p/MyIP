@@ -1,6 +1,6 @@
 {
-    "name": "ip_skk_moe",
-    "version": "0.0.0",
+    "name": "my_ip",
+    "version": "0.0.1",
     "private": true,
     "description": "An alternative ip111 service",
     "main": "index.js",
@@ -9,15 +9,15 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/SukkaW/MyIP.git"
+        "url": "git+https://github.com/nb5p/MyIP.git"
     },
     "author": "SukkaW (https://skk.moe)",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/SukkaW/MyIP/issues"
+        "url": "https://github.com/nb5p/MyIP/issues"
     },
-    "homepage": "https://github.com/SukkaW/MyIP#readme",
-    "dependencies": {
+    "homepage": "https://github.com/nb5p/MyIP",
+    "devDependencies": {
         "@babel/core": "7.7.2",
         "@babel/preset-env": "7.7.1",
         "gulp": "4.0.2",

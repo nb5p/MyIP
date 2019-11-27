@@ -7,15 +7,11 @@ let IP = {
                 return Promise.all([resp.ok, resp.status, resp.text(), resp.headers]);
             else {
                 return Promise.all([resp.ok, resp.status, resp.json(), resp.headers]);
-            }})
+            }
+        })
         .then(([ok, status, data, headers]) => {
             if (ok) {
-                let json = {
-                    ok,
-                    status,
-                    data,
-                    headers
-                }
+                let json = { ok, status, data, headers }
                 return json;
             } else {
                 throw new Error(JSON.stringify(json.error));
@@ -23,16 +19,15 @@ let IP = {
         }).catch(error => {
             throw error;
         }),
+    getJsonp: (url) => {
+        var script = document.createElement('script');
+        script.src = url
+        document.head.appendChild(script);
+    },
     parseIPMoeip: (ip, elID) => {
         IP.get(`https://ip.mcr.moe/?ip=${ip}&unicode&z=${random}`, 'json')
             .then(resp => {
                 $$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.area} ${resp.data.provider}`;
-            })
-    },
-    parseIPIp_api: (ip, elID) => {
-        IP.get(`http://ip-api.com/json/${ip}?z=${random}`, 'json')
-            .then(resp => {
-                $$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.city} ${resp.data.isp}`;
             })
     },
     parseIPIpapi: (ip, elID) => {
@@ -67,12 +62,17 @@ let IP = {
             });
     },
     getSohuIP: () => {
-        if (typeof returnCitySN === 'undefined') {
-            console.log('Failed to load resource: pv.sohu.com')
-        } else {
-            $$.getElementById('ip-sohu').innerHTML = returnCitySN.cip;
-            IP.parseIPMoeip(returnCitySN.cip, 'ip-sohu-geo');
+        var script = document.createElement('script');
+        script.src = 'https://pv.sohu.com/cityjson?ie=utf-8'
+        script.onload = () => {
+            if (typeof returnCitySN === 'undefined') {
+                console.log('Failed to load resource: pv.sohu.com')
+            } else {
+                $$.getElementById('ip-sohu').innerHTML = returnCitySN.cip;
+                IP.parseIPMoeip(returnCitySN.cip, 'ip-sohu-geo');
+            }
         }
+        document.head.appendChild(script);
     },
     getIpsbIP: () => {
         IP.get(`https://api.ip.sb/geoip?z=${random}`, 'json')
@@ -88,7 +88,7 @@ let IP = {
                 return resp.data.ip;
             })
             .then(ip => {
-                IP.parseIPIp_api(ip, 'ip-ipify-geo');
+                IP.parseIPIpapi(ip, 'ip-ipify-geo');
             })
             .catch(e => {
                 console.log('Failed to load resource: api.ipify.org')

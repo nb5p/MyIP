@@ -4,13 +4,14 @@ An alternative ip111 service
 
 ## Info
 
-- IPIP API for IP detection: `https://myip.ipip.net`
-- ~~Taobao JSONP IP API: `https://www.taobao.com/help/getip.php`~~
+- IPIP.net API: `https://myip.ipip.net`
 - Sohu JSON IP API: `https://pv.sohu.com/cityjson?ie=utf-8`
-- [IP.SB](https://ip.sb) API: `https://ip.sb/api/`
-- ~~IPIFY for IP detection: `https://www.ipify.org/`~~
-- IPAPI for IP detection: `https://ipapi.co/json`
-- IPIP API for Geo-IP: `https://freeapi.ipip.net`
+- IP.SB API: `https://ip.sb/api/`
+- IPAPI: `https://ipapi.co/json`
+- IP-API: `https://ip-api.com/json`
+- Meo IP API: `https://ip.mcr.moe/`
+- IPIFY API: `https://www.ipify.org/`
+- ~~Taobao JSONP IP API: `https://www.taobao.com/help/getip.php`~~
 
 ## Contributing
 

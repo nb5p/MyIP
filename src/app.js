@@ -23,20 +23,22 @@ let IP = {
         }).catch(error => {
             throw error;
         }),
-    parseIPIpapi: (ip, elID) => {
-        IP.get(`https://api.skk.moe/network/parseIp/ipip/v3/${ip}`, 'json')
+    parseIPMoeip: (ip, elID) => {
+        IP.get(`https://ip.mcr.moe/?ip=${ip}&unicode&z=${random}`, 'json')
             .then(resp => {
-                $$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.regionName} ${resp.data.city} ${resp.data.isp}`;
+                $$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.area} ${resp.data.provider}`;
             })
     },
-    parseIPIpip: (ip, elID) => {
-        IP.get(`https://api.skk.moe/network/parseIp/ipip/v3/${ip}`, 'json')
+    parseIPIp_api: (ip, elID) => {
+        IP.get(`http://ip-api.com/json/${ip}?z=${random}`, 'json')
             .then(resp => {
-                let x = '';
-                for (let i of resp.data) {
-                    x += (i !== '') ? `${i} ` : '';
-                }
-                $$.getElementById(elID).innerHTML = x;
+                $$.getElementById(elID).innerHTML = `${resp.data.country} ${resp.data.city} ${resp.data.isp}`;
+            })
+    },
+    parseIPIpapi: (ip, elID) => {
+        IP.get(`https://ipapi.co/${ip}/json?z=${random}`, 'json')
+            .then(resp => {
+                $$.getElementById(elID).innerHTML = `${resp.data.country_name} ${resp.data.city} ${resp.data.org}`;
             })
     },
     getWebrtcIP: function() {
@@ -69,16 +71,15 @@ let IP = {
             console.log('Failed to load resource: pv.sohu.com')
         } else {
             $$.getElementById('ip-sohu').innerHTML = returnCitySN.cip;
-            IP.parseIPIpip(returnCitySN.cip, 'ip-sohu-geo');
+            IP.parseIPMoeip(returnCitySN.cip, 'ip-sohu-geo');
         }
     },
-    getTaobaoIP: (data) => {
-        $$.getElementById('ip-taobao').innerHTML = data.ip;
-        IP.parseIPIpip(data.ip, 'ip-taobao-geo');
-    },
-    getIpsbIP: (data) => {
-        $$.getElementById('ip-ipsb').innerHTML = data.address;
-        $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.operator}`;
+    getIpsbIP: () => {
+        IP.get(`https://api.ip.sb/geoip?z=${random}`, 'json')
+            .then(resp => {
+                $$.getElementById('ip-ipsb').innerHTML = resp.data.ip;
+                $$.getElementById('ip-ipsb-geo').innerHTML = `${resp.data.country} ${resp.data.city} ${resp.data.organization}`;
+            })
     },
     getIpifyIP: () => {
         IP.get(`https://api.ipify.org/?format=json&z=${random}`, 'json')
@@ -87,7 +88,7 @@ let IP = {
                 return resp.data.ip;
             })
             .then(ip => {
-                IP.parseIPIpip(ip, 'ip-ipify-ipip');
+                IP.parseIPIp_api(ip, 'ip-ipify-geo');
             })
             .catch(e => {
                 console.log('Failed to load resource: api.ipify.org')
@@ -97,7 +98,7 @@ let IP = {
         IP.get(`https://ipapi.co/json?z=${random}`, 'json')
             .then(resp => {
                 $$.getElementById('ip-ipapi').innerHTML = resp.data.ip;
-                IP.parseIPIpip(resp.data.ip, 'ip-ipapi-ipip');
+                IP.parseIPIpapi(resp.data.ip, 'ip-ipapi-geo');
             })
             .catch(e => {
                 console.log('Failed to load resource: ipapi.co')
@@ -140,6 +141,6 @@ IP.getWebrtcIP()
 IP.getIpipnetIP();
 IP.getSohuIP();
 
-// IP.getIpsbIP();
+IP.getIpsbIP();
 IP.getIpifyIP();
 IP.getIpapiIP();

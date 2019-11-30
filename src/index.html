@@ -55,7 +55,7 @@
             <div class="columns">
                 <div class="column">
                     <div class="box">
-                        <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从国内查询</h2>
+                        <h2 class="sk-text-center sk-text-bold subtitle sk-mb-1">从本机查询</h2>
                         <p class="sk-text-center sk-text-small">数据来自 WebRTC</p>
                         <hr class="sk-my-2">
                         <div class="ip-body">
@@ -186,6 +186,17 @@
             </div>
         </section>
     </div>
+    <script>
+        HTTP.runcheck();
+
+        IP.getWebrtcIP()
+        IP.getIpipnetIP();
+        IP.getSohuIP();
+
+        IP.getIpsbIP();
+        IP.getIpifyIP();
+        IP.getIpapiIP();
+    </script>
 </body>
 
 </html>

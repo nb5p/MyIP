@@ -61,6 +61,13 @@ let IP = {
                 $$.getElementById('ip-ipipnet').innerHTML = `<p id="ip-ipipnet">${data[0]}</p><p class="sk-text-small" id="ip-ipipnet-geo">${data[1]}</p>`;
             });
     },
+    getIpipnetIPSimple: () => {
+        IP.get(`https://myip.ipip.net/?z=${random}`, 'text')
+        .then((resp) => {
+            let data = resp.data.replace('当前 IP：', '').split(' 来自于：');
+            $$.getElementById('ip-ipipnet').innerHTML = `${data[0]} ${data[1]}`;
+        });
+    },
     getSohuIP: () => {
         var script = document.createElement('script');
         script.src = 'https://pv.sohu.com/cityjson?ie=utf-8'
@@ -134,13 +141,3 @@ let HTTP = {
         HTTP.checker('www.youtube.com', 'http-youtube');
     }
 };
-
-HTTP.runcheck();
-
-IP.getWebrtcIP()
-IP.getIpipnetIP();
-IP.getSohuIP();
-
-IP.getIpsbIP();
-IP.getIpifyIP();
-IP.getIpapiIP();

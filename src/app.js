@@ -43,13 +43,17 @@ let IP = {
         webrtc.createDataChannel(""),
         webrtc.createOffer(webrtc.setLocalDescription.bind(webrtc), i),
         webrtc.onicecandidate = function(con) {
-            if (con && con.candidate && con.candidate.candidate) {
-                var webctrip = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/
-                    .exec(con.candidate.candidate)[1];
-                $$.getElementById("ip-webrtc").innerHTML = webctrip,
-                webrtc.onicecandidate = i;
-                $$.getElementById("ip-webrtc-geo").innerHTML = "WebRTC Leaked IP"
-            } else {
+            try {
+                if (con && con.candidate && con.candidate.candidate) {
+                    var webctrip = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/
+                        .exec(con.candidate.candidate)[1];
+                    $$.getElementById("ip-webrtc").innerHTML = webctrip,
+                    webrtc.onicecandidate = i;
+                    $$.getElementById("ip-webrtc-geo").innerHTML = "WebRTC Leaked IP"
+                } else {
+                    $$.getElementById("ip-webrtc").innerHTML = "N/A";
+                }
+            } catch {
                 $$.getElementById("ip-webrtc").innerHTML = "N/A";
             }
         }

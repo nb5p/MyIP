@@ -1,6 +1,6 @@
 const gulp = require('gulp');
-let babel = require('gulp-babel');
-let uglify = require('gulp-uglify');
+const babel = require('gulp-babel');
+const uglify = require('gulp-uglify');
 const htmlmin = require("gulp-htmlmin");
 const htmlclean = require("gulp-htmlclean");
 

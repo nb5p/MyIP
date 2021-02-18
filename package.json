@@ -16,8 +16,8 @@
     },
     "homepage": "https://github.com/nb5p/MyIP",
     "devDependencies": {
-        "@babel/core": "7.12.13",
-        "@babel/preset-env": "7.12.13",
+        "@babel/core": "7.12.17",
+        "@babel/preset-env": "7.12.17",
         "gulp": "4.0.2",
         "gulp-babel": "8.0.0",
         "gulp-htmlclean": "2.7.22",

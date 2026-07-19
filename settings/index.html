@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/suka.css@0.2.1" />
+    <title>设置 - IP 地址查询</title>
+    <script type="module" crossorigin src="../assets/settings-Cm6qcv_0.js"></script>
+    <link rel="modulepreload" crossorigin href="../assets/dom-D94r_qxZ.js">
+    <link rel="modulepreload" crossorigin href="../assets/webrtc-preference-CVTQ9do3.js">
+    <link rel="modulepreload" crossorigin href="../assets/cloudflare-preference-BU_2mnAd.js">
+    <link rel="stylesheet" crossorigin href="../assets/dom-D-Uj5VNh.css">
+  </head>
+  <body class="settings-page">
+    <main class="settings-container">
+      <header class="settings-header">
+        <div>
+          <h1 class="title settings-title">设置</h1>
+          <p class="settings-description">设置只保存在当前浏览器中。</p>
+        </div>
+        <a class="settings-back-link" href="../">返回首页</a>
+      </header>
+
+      <form id="settings-form">
+        <h2 class="settings-section-title">首页</h2>
+        <section class="box settings-panel">
+          <div class="settings-row">
+            <span id="webrtc-display-label" class="settings-item-label">显示外部 WebRTC IP</span>
+            <div class="webrtc-mode-options" role="radiogroup" aria-labelledby="webrtc-display-label">
+              <label class="webrtc-mode-option">
+                <input type="radio" name="webrtc-display-mode" value="always" />
+                <span>始终</span>
+              </label>
+              <label class="webrtc-mode-option">
+                <input type="radio" name="webrtc-display-mode" value="auto" />
+                <span>自动</span>
+              </label>
+              <label class="webrtc-mode-option">
+                <input type="radio" name="webrtc-display-mode" value="off" />
+                <span>关闭</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="box settings-panel cloudflare-settings-panel">
+          <header class="cloudflare-settings-header">
+            <h2 class="settings-item-label">Cloudflare 分流检测站点</h2>
+            <div class="cloudflare-settings-summary">
+              <span id="cloudflare-probe-count" class="settings-count"></span>
+              <button
+                id="toggle-cloudflare-settings"
+                class="button is-small cloudflare-settings-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="cloudflare-settings-content"
+              >
+                展开
+              </button>
+            </div>
+          </header>
+          <div id="cloudflare-settings-content" hidden>
+            <div id="cloudflare-settings-list" class="cloudflare-settings-list"></div>
+            <div class="cloudflare-add-row">
+              <input
+                id="cloudflare-probe-name"
+                class="input"
+                type="text"
+                maxlength="80"
+                aria-label="网站名称"
+                placeholder="网站名称（可选）"
+              />
+              <input
+                id="cloudflare-probe-input"
+                class="input"
+                type="text"
+                inputmode="url"
+                aria-label="Cloudflare 域名或 Trace 地址"
+                placeholder="example.com 或 https://example.com/cdn-cgi/trace"
+              />
+              <button id="add-cloudflare-probe" class="button" type="button">验证并添加</button>
+            </div>
+            <p id="cloudflare-settings-status" class="settings-status" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <div class="settings-actions">
+          <button id="save-settings" class="button is-dark" type="submit">保存设置</button>
+          <button class="button" id="reset-settings" type="button">恢复默认</button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

@@ -20,7 +20,7 @@
   "homepage": "https://github.com/nb5p/MyIP",
   "devDependencies": {
     "typescript": "5.5.4",
-    "vite": "8.1.2",
+    "vite": "8.3.5",
     "vitest": "4.1.11"
   }
 }
